@@ -10,7 +10,6 @@
 #>
 function Get-TinderToken
 {
-
     [cmdletbinding()]
     Param
     (
@@ -18,23 +17,12 @@ function Get-TinderToken
         [Parameter(Mandatory = $true)]
         [string]
         $PhoneNumber
-    )
-        
-    $RequestSend = Invoke-WebRequest -Uri "https://api.gotinder.com/v2/auth/sms/send?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"phone_number`":`"$PhoneNumber`"}"
-
+    )   
+    $RequestSend = Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/sms/send?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"phone_number`":`"$PhoneNumber`"}"
     $SMSCode = Read-Host "Enter SMS Code"
-
-    $RequestValidate = Invoke-WebRequest -Uri "https://api.gotinder.com/v2/auth/sms/validate?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"otp_code`":`"$SMSCode`",`"phone_number`":`"$PhoneNumber`"}"
-
-    $RequestValidate = $RequestValidate | Convertfrom-Json
-
-    $RefreshToken = $RequestValidate.data.refresh_token
-
-    $RequestToken = Invoke-WebRequest -Uri "https://api.gotinder.com/v2/auth/login/sms?locale=en" -Method "POST" -ContentType "application/json" -Body "{`"refresh_token`":`"$RefreshToken`",`"phone_number`":`"$PhoneNumber`"}"
-
-    $RequestToken = $RequestToken | ConvertFrom-Json
-
+    $RequestValidate = Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/sms/validate?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"otp_code`":`"$SMSCode`",`"phone_number`":`"$PhoneNumber`"}"
+    $RefreshToken = $requestvalidate.data.refresh_token
+    $RequestToken = Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/login/sms?locale=en" -Method "POST" -ContentType "application/json" -Body "{`"refresh_token`":`"$RefreshToken`",`"phone_number`":`"$PhoneNumber`"}"
     $TinderToken = $RequestToken.data.api_token
-
     Return "This is your Tinder Token: $TinderToken"
 }
