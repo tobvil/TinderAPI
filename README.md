@@ -1,5 +1,7 @@
 # TinderAPI
-Powershell functions used to communicate with Tinder API
+Powershell functions used to communicate with Tinder API.
+
+Note: Not yet working if your tinder account is associated with Facebook.
 
 # TinderCustomVisionAPI
 Build a classifier and use Azure Cognitive Services AI to automatically like or pass users, based on how you train your model.
@@ -14,6 +16,6 @@ Build a classifier and use Azure Cognitive Services AI to automatically like or 
 
 5. Input Prediction-Key and Image URL in config.json file. https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/use-prediction-api
 
-6. From Powershell simply run .\Invoke-TinderCustomVisonAPI.ps1
+6. From Powershell simply run .\Invoke-TinderCustomVisonAPI.ps1 - You'll be prompted to enter the code you recieved on your phone from tinder.
 
 7. After a couple of minutes, end the script by pressing "CTRL + C" and go back to https://customvision.ai under predictions and tag the new images to make the predictions more precise. 
