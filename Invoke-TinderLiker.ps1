@@ -24,10 +24,15 @@ function Invoke-TinderLiker
 
     while ($True)
     {
-        
-        $RecommendationRequest = Invoke-RestMethod -Method Post -Uri "https://api.gotinder.com/user/recs" -Headers $Headers -ContentType application/json 
-
-        $Results = $RecommendationRequest.results
+        try
+        {
+            $RecommendationRequest = Invoke-RestMethod -Method Post -Uri "https://api.gotinder.com/user/recs" -Headers $Headers -ContentType application/json
+            $Results = $RecommendationRequest.results
+        }
+        catch
+        {
+            throw
+        }
 
         foreach ($R in $Results)
         {
@@ -38,7 +43,10 @@ function Invoke-TinderLiker
 
             $Name = $R.name
     
-            $LikeRequest = Invoke-RestMethod -Method Get -Uri "https://api.gotinder.com/like/$ID" -Headers $Headers -ContentType applictaion/json
+            $LikeRequest = Invoke-RestMethod -Method Get -Uri "https://api.gotinder.com/like/$ID" -Headers $Headers -ContentType applictaion/json -ErrorAction SilentlyContinue
+            
+            $i++
+            Write-Host “Like Count $i”
 
             if ($LikeRequest.match -eq 'True')
             {
