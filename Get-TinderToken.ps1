@@ -1,4 +1,15 @@
-function Get-TinderSMSToken
+<#
+.Synopsis
+   Get-TinderToken-ps1 - Gets the personal token used to communicate with the Tinder API
+.DESCRIPTION
+   Function for fething the token used to access Tinder API
+.EXAMPLE
+   Get-TinderToken -PhoneNumber 4588888888
+
+.NOTES
+   Written by Tobias Vilhelmsen
+#>
+function Get-TinderToken
 {
 
     [cmdletbinding()]
@@ -10,21 +21,21 @@ function Get-TinderSMSToken
         $PhoneNumber
     )
         
-        $RequestSend = Invoke-WebRequest -Uri "https://api.gotinder.com/v2/auth/sms/send?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"phone_number`":`"$PhoneNumber`"}"
+    $RequestSend = Invoke-WebRequest -Uri "https://api.gotinder.com/v2/auth/sms/send?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"phone_number`":`"$PhoneNumber`"}"
 
-        $SMSCode = Read-Host "Enter SMS Code"
+    $SMSCode = Read-Host "Enter SMS Code"
 
-        $RequestValidate = Invoke-WebRequest -Uri "https://api.gotinder.com/v2/auth/sms/validate?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"otp_code`":`"$SMSCode`",`"phone_number`":`"$PhoneNumber`"}"
+    $RequestValidate = Invoke-WebRequest -Uri "https://api.gotinder.com/v2/auth/sms/validate?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"otp_code`":`"$SMSCode`",`"phone_number`":`"$PhoneNumber`"}"
 
-        $RequestValidate = $RequestValidate | Convertfrom-Json
+    $RequestValidate = $RequestValidate | Convertfrom-Json
 
-        $RefreshToken = $RequestValidate.data.refresh_token
+    $RefreshToken = $RequestValidate.data.refresh_token
 
-        $RequestToken = Invoke-WebRequest -Uri "https://api.gotinder.com/v2/auth/login/sms?locale=en" -Method "POST" -ContentType "application/json" -Body "{`"refresh_token`":`"$RefreshToken`",`"phone_number`":`"$PhoneNumber`"}"
+    $RequestToken = Invoke-WebRequest -Uri "https://api.gotinder.com/v2/auth/login/sms?locale=en" -Method "POST" -ContentType "application/json" -Body "{`"refresh_token`":`"$RefreshToken`",`"phone_number`":`"$PhoneNumber`"}"
 
-        $RequestToken = $RequestToken | ConvertFrom-Json
+    $RequestToken = $RequestToken | ConvertFrom-Json
 
-        $TinderToken = $RequestToken.data.api_token
+    $TinderToken = $RequestToken.data.api_token
 
-        Return $TinderToken
-    }
+    Return $TinderToken
+}
