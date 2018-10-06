@@ -1,7 +1,7 @@
 # TinderAPI
 Powershell functions used to communicate with Tinder API.
 
-Note: Not yet working if your tinder account is associated with Facebook.
+Note: Not yet working with Facebook authentication.
 
 # TinderCustomVisionAPI
 Build a classifier and use Azure Cognitive Services AI to automatically like or pass users, based on how you train your model.
