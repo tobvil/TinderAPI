@@ -5,7 +5,6 @@
    Function for fething the token used to access Tinder API. The token lifetime is 24 Hours.
 .EXAMPLE
    Get-TinderToken -PhoneNumber 4588888888
-
 .NOTES
    Written by Tobias Vilhelmsen
 #>
