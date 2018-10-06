@@ -2,7 +2,7 @@
 .Synopsis
    Get-TinderLiker.ps1 - Used for indisciminately liking every user in an endless loop
 .DESCRIPTION
-   Function for liking everyone on tinder
+   Function for liking everyone on tinder. Get tinder token by using Get-TinderToken.ps1
 .EXAMPLE
    Invoke-TinderLiker -TinderToken 123456-123416-123461-123412
 .NOTES
@@ -39,7 +39,6 @@ function Invoke-TinderLiker
             $Name = $R.name
     
             $LikeRequest = Invoke-RestMethod -Method Get -Uri "https://api.gotinder.com/like/$ID" -Headers $Headers -ContentType applictaion/json
-            Write-Output "Liking $Name `n$PhotoURL"
 
             if ($LikeRequest.match -eq 'True')
             {
@@ -49,7 +48,6 @@ function Invoke-TinderLiker
             {
                 Write-Output "Liking $Name `n$PhotoURL"
             }
-
         }
     }
 }
