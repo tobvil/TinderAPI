@@ -2,7 +2,7 @@
 .Synopsis
    Get-TinderToken-ps1 - Gets the personal token used to communicate with the Tinder API
 .DESCRIPTION
-   Function for fething the token used to access Tinder API
+   Function for fething the token used to access Tinder API. The token lifetime is 24 Hours.
 .EXAMPLE
    Get-TinderToken -PhoneNumber 4588888888
 
@@ -37,5 +37,5 @@ function Get-TinderToken
 
     $TinderToken = $RequestToken.data.api_token
 
-    Return $TinderToken
+    Return "This is your Tinder Token: $TinderToken"
 }
