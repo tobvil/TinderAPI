@@ -16,7 +16,7 @@ Use Invoke-TinderLiker to swipe right on every possible match
 
 4. Enter SMS code sent to you mobile
 
-5. To end the loop press CTRL + C
+5. To end the loop press "CTRL + C"
 
 ## TinderCustomVisionAPI
 
