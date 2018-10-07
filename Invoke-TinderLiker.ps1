@@ -51,3 +51,5 @@ function Invoke-TinderLiker
         }
     }
 }
+$PhoneNumber = Read-Host "Enter country code + phone number e.g. 4588888888"
+Invoke-TinderLiker
