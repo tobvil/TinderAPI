@@ -1,4 +1,4 @@
-function Get-TinderSMSToken
+function Get-TinderToken
 {
     $RequestSend = Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/sms/send?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"phone_number`":`"$PhoneNumber`"}"
     $SMSCode = Read-Host "Enter SMS Code"
@@ -32,7 +32,7 @@ function Get-HotOrNot
 }
 function Invoke-TinderCustomVisionAPI
 {
-    Get-TinderSMSToken
+    Get-TinderToken
     $Headers = @{"X-Auth-Token" = "$TinderToken"}
     while ($True)
     {
