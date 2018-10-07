@@ -20,7 +20,7 @@ function Get-HotOrNot
     $Headers = @{"Prediction-Key" = "$PredictionKey"}
     $Body = @{"Url" = "$ImageURL"} | ConvertTo-Json
     $Request = Invoke-RestMethod -Method Post -Uri "$CustomVisionURL" -Headers $Headers -Body $Body -ContentType application/json
-    $HotPrediction = $Request.predictions | Where tagName -EQ 'Hot'
+    $HotPrediction = $Request.predictions | Where-Object tagName -EQ 'Hot'
     if ($HotPrediction.probability -gt 0.5)
     {
         $Script:Hot = $True
@@ -36,19 +36,36 @@ function Invoke-TinderCustomVisionAPI
     $Headers = @{"X-Auth-Token" = "$TinderToken"}
     while ($True)
     {
-        $RecommendationRequest = Invoke-RestMethod -Method Post -Uri "https://api.gotinder.com/user/recs" -Headers $Headers -ContentType application/json 
-        $Results = $RecommendationRequest.results
+        try
+        {
+            $RecommendationRequest = Invoke-RestMethod -Method Post -Uri "https://api.gotinder.com/user/recs" -Headers $Headers -ContentType application/json
+            $Results = $RecommendationRequest.results
+        }
+        catch
+        {
+            Write-Error "Couldn't find new recommendations" -ErrorAction Stop
+        }
         foreach ($R in $Results)
         {
             $Id = $R._id
-            $ImageURL = $R.photos.Url[0]
+            $ImageURL = $R.photos.Url | Select-Object -First 1
             $Name = $R.name
             Get-HotOrNot -ImageURL $ImageURL
             $i++
             Write-Output "Loop Count $i"
             if ($Hot -eq $true)
             {
-                $LikeRequest = Invoke-RestMethod -Method Get -Uri "https://api.gotinder.com/like/$ID" -Headers $Headers -ContentType applictaion/json
+                do
+                {
+                    try
+                    {
+                        $LikeRequest = Invoke-RestMethod -Method Get -Uri "https://api.gotinder.com/like/$ID" -Headers $Headers -ContentType applictaion/json
+                    }
+                    catch
+                    {
+                        Write-Error "$_ - Trying again :)"
+                    }
+                } while (-not $LikeRequest)
                 if ($LikeRequest.match -eq 'True')
                 {
                     Write-Output "Yaaay you matched with $Name `n$ImageURL"
@@ -60,8 +77,18 @@ function Invoke-TinderCustomVisionAPI
             }
             elseif ($Hot -eq $false)
             {
-                $PassRequest = Invoke-RestMethod -Method Get -Uri "https://api.gotinder.com/pass/$ID" -Headers $Headers -ContentType application/json
-                Write-Output "Passing on $Name `n$PhotoURL"
+                do
+                {
+                    try
+                    {
+                        $PassRequest = Invoke-RestMethod -Method Get -Uri "https://api.gotinder.com/pass/$ID" -Headers $Headers -ContentType applictaion/json
+                    }
+                    catch
+                    {
+                        Write-Error "$_ - Trying again :)"
+                    }
+                } while (-not $PassRequest)
+                Write-Output "Passing on $Name `n$ImageURL"
             }
         }
     }

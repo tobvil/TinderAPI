@@ -10,18 +10,14 @@
 #>
 function Invoke-TinderLiker
 {
-
     [cmdletbinding()]
     Param
     (
-
         #Input tinder token you got from Get-TinderToken.ps1
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         $TinderToken
     )
-
     $Headers = @{"X-Auth-Token" = "$TinderToken"}
-
     while ($True)
     {
         try
@@ -31,31 +27,34 @@ function Invoke-TinderLiker
         }
         catch
         {
-            throw
+            Write-Error "Couldn't find new recommendations" -ErrorAction Stop
         }
-
         foreach ($R in $Results)
         {
-    
             $Id = $R._id
-        
-            $PhotoURL = $R.photos.Url[0]
-
+            $ImageURL = $R.photos.Url | Select-Object -First 1
             $Name = $R.name
-    
-            $LikeRequest = Invoke-RestMethod -Method Get -Uri "https://api.gotinder.com/like/$ID" -Headers $Headers -ContentType applictaion/json -ErrorAction SilentlyContinue
-            
-            $i++
-            Write-Host “Like Count $i”
-
+            do
+            {
+                try
+                {
+                    $LikeRequest = Invoke-RestMethod -Method Get -Uri "https://api.gotinder.com/like/$ID" -Headers $Headers -ContentType applictaion/json
+                }
+                catch
+                {
+                    Write-Error "$_ - Trying again :)"
+                }
+            } while (-not $LikeRequest)
             if ($LikeRequest.match -eq 'True')
             {
-                Write-Output "Yaaay you matched with $Name `n$PhotoURL"
+                Write-Output "Yaaay you matched with $Name `n$ImageURL"
             }
             else
             {
-                Write-Output "Liking $Name `n$PhotoURL"
+                Write-Output "Liking $Name `n$ImageURL"
             }
+            $i++
+            Write-Output "Like Count $i`n"
         }
     }
 }
