@@ -51,8 +51,6 @@ function Invoke-TinderCustomVisionAPI
             $ImageURL = $R.photos.Url | Select-Object -First 1
             $Name = $R.name
             Get-HotOrNot -ImageURL $ImageURL
-            $i++
-            Write-Output "Loop Count $i"
             if ($Hot -eq $true)
             {
                 do
@@ -90,6 +88,8 @@ function Invoke-TinderCustomVisionAPI
                 } while (-not $PassRequest)
                 Write-Output "Passing on $Name `n$ImageURL"
             }
+            $i++
+            Write-Output "Loop Count $i`n"
         }
     }
 }
