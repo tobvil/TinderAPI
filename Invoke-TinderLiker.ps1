@@ -1,22 +1,15 @@
-<#
-.Synopsis
-   Get-TinderLiker.ps1 - Used for indisciminately liking every user in an endless loop
-.DESCRIPTION
-   Function for liking everyone on tinder. Get tinder token by using Get-TinderToken.ps1
-.EXAMPLE
-   Invoke-TinderLiker -TinderToken 123456-123416-123461-123412
-.NOTES
-   Written by Tobias Vilhelmsen
-#>
+function Get-TinderToken
+{
+    $RequestSend = Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/sms/send?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"phone_number`":`"$PhoneNumber`"}"
+    $SMSCode = Read-Host "Enter SMS Code"
+    $RequestValidate = Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/sms/validate?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"otp_code`":`"$SMSCode`",`"phone_number`":`"$PhoneNumber`"}"
+    $RefreshToken = $requestvalidate.data.refresh_token
+    $RequestToken = Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/login/sms?locale=en" -Method "POST" -ContentType "application/json" -Body "{`"refresh_token`":`"$RefreshToken`",`"phone_number`":`"$PhoneNumber`"}"
+    $Script:TinderToken = $requesttoken.data.api_token
+}
 function Invoke-TinderLiker
 {
-    [cmdletbinding()]
-    Param
-    (
-        #Input tinder token you got from Get-TinderToken.ps1
-        [Parameter(Mandatory = $true)]
-        $TinderToken
-    )
+    Get-TinderToken
     $Headers = @{"X-Auth-Token" = "$TinderToken"}
     while ($True)
     {
