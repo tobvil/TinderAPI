@@ -14,7 +14,7 @@ Use Invoke-TinderLiker to swipe right on every possible match
 
 3. Enter phone number when prompted. Should be county code + phone number e.g. 4588888888
 
-4. Enter SMS code sent to you mobile
+4. Enter SMS code sent to your mobile
 
 5. To end the loop press "CTRL + C"
 
