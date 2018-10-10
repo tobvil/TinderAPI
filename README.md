@@ -27,6 +27,7 @@ Build a classifier and use Azure Cognitive Services AI to automatically like or 
 2. Follow MS guidance on how to buld your classifier: <https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/getting-started-build-a-classifier>
 
 3. Upload 5 images of ugly girls and tag the images "Not", and upload 5 images of hot girls and tag them "Hot"
+And set your prediction as "default".
 
 4. Input your PhoneNumber you use with Tinder in config.json file.
 
