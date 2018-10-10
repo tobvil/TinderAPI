@@ -9,19 +9,16 @@ function Get-TinderToken
 }
 function Get-HotOrNot
 {
-    [cmdletbinding()]
-    Param
-    ( 
-        [Parameter(Mandatory = $true)]
-        [string]
-        $ImageURL
-    )
-
     $Headers = @{"Prediction-Key" = "$PredictionKey"}
-    $Body = @{"Url" = "$ImageURL"} | ConvertTo-Json
-    $Request = Invoke-RestMethod -Method Post -Uri "$CustomVisionURL" -Headers $Headers -Body $Body -ContentType application/json
-    $HotPrediction = $Request.predictions | Where-Object tagName -EQ 'Hot'
-    if ($HotPrediction.probability -gt 0.5)
+    foreach ($Image in $ImageURL)
+    {
+        $Body = @{"Url" = "$Image"} | ConvertTo-Json
+        $Request = Invoke-RestMethod -Method Post -Uri "$CustomVisionURL" -Headers $Headers -Body $Body -ContentType application/json
+        $i++
+        [PSObject[]]$HotPrediction += $Request.predictions | Where-Object tagName -EQ 'Hot'
+    }
+    $ImageAverage = $HotPrediction.probability | Measure-Object -Average
+    if ($ImageAverage.Average -gt 0.5)
     {
         $Script:Hot = $True
     }
@@ -48,9 +45,9 @@ function Invoke-TinderCustomVisionAPI
         foreach ($R in $Results)
         {
             $Id = $R._id
-            $ImageURL = $R.photos.Url | Select-Object -First 1
+            $Script:ImageURL = $R.photos.Url
             $Name = $R.name
-            Get-HotOrNot -ImageURL $ImageURL
+            Get-HotOrNot
             if ($Hot -eq $true)
             {
                 do
