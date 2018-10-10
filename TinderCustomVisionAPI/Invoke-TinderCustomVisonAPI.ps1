@@ -16,8 +16,10 @@ function Get-HotOrNot
         $Request = Invoke-RestMethod -Method Post -Uri "$CustomVisionURL" -Headers $Headers -Body $Body -ContentType application/json
         $i++
         [PSObject[]]$HotPrediction += $Request.predictions | Where-Object tagName -EQ 'Hot'
+        $HotPrediction | Add-Member -NotePropertyName 'ImageURL' -NotePropertyValue $Image -ErrorAction SilentlyContinue
     }
-    $ImageAverage = $HotPrediction.probability | Measure-Object -Average
+    $script:ImageAverage = $HotPrediction.probability | Measure-Object -Average -Maximum
+    $script:BestImage = $HotPrediction | Where-Object probability -EQ $ImageAverage.Maximum | Select-Object -ExpandProperty ImageURL
     if ($ImageAverage.Average -gt 0.5)
     {
         $Script:Hot = $True
@@ -63,11 +65,11 @@ function Invoke-TinderCustomVisionAPI
                 } while (-not $LikeRequest)
                 if ($LikeRequest.match -eq 'True')
                 {
-                    Write-Output "Yaaay you matched with $Name `n$ImageURL"
+                    Write-Output "Yaaay you matched with $Name `n$BestImage`nScore: "$ImageAverage.Average""
                 }
                 else
                 {
-                    Write-Output "Liking $Name `n$ImageURL"
+                    Write-Output "Liking $Name `n$BestImage`nScore: "$ImageAverage.Average""
                 }
             }
             elseif ($Hot -eq $false)
@@ -83,7 +85,7 @@ function Invoke-TinderCustomVisionAPI
                         Write-Error "$_ - Trying again :)"
                     }
                 } while (-not $PassRequest)
-                Write-Output "Passing on $Name `n$ImageURL"
+                Write-Output "Passing on $Name `n$BestImage`nScore: "$ImageAverage.Average""
             }
             $i++
             Write-Output "Loop Count $i`n"
