@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "PhoneNumber":  "4588888888",
     "CustomVisionURL":  "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/b4c8953f-88f4-4fd1-b9eb-02dc46e06bcd/url",
     "CustomVisionPrediction-Key":  "6f67e633c09046839bd92c9a286b3c18",
@@ -8,3 +9,10 @@
     "Intellectual": "Opener4",
     "Cocky Funny": "Opener3"
 }
+=======
+    "PhoneNumber":  "4553729852",
+    "CustomVisionURL":  "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/b4c8953f-88f4-4fd1-b9eb-02dc46e06bcd/url",
+    "CustomVisionPrediction-Key":  "6f67e633c09046839bd92c9a286b3c18"
+}
+
+>>>>>>> 83d2b115c44578dd3699fcac349de881ab47d5c5

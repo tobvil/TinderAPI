@@ -36,3 +36,5 @@ And set your prediction as "default".
 6. From Powershell simply run .\Invoke-TinderCustomVisonAPI.ps1 - You'll be prompted to enter the code you recieved on your phone from tinder.
 
 7. After a couple of minutes, end the script by pressing "CTRL + C" and go back to <https://customvision.ai> under predictions and tag the new images to make the predictions more precise.
+
+8. Enjoy
