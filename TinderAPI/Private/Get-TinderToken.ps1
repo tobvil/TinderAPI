@@ -1,7 +1,7 @@
 function Get-TinderToken {
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string]
         $PhoneNumber
     )
