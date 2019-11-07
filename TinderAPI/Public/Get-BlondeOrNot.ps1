@@ -8,17 +8,11 @@ function Get-BlondeOrNot
 
         [Parameter(Mandatory)]
         [string]
-        $Key = 'e8fc31351f5541c98e5f7f66584fb329',
+        $Key,
 
         [Parameter(Mandatory)]
         [string]
-        $ProjectId = '44351a63-7587-4c0e-815f-8e3039cbe99f',
-
-        [Parameter(Mandatory)]
-        [string]
-        $ProjectName = 'BlondeOrNot'
-
-
+        $Endpoint
 
     )
 
@@ -35,22 +29,20 @@ function Get-BlondeOrNot
     $recs = Invoke-RestMethod @params -Uri "https://api.gotinder.com/v2/recs/core"
 
     foreach ($rec in $recs.data.results) {
-        foreach ($photo in $rec.user.photos.url) {
 
             $predictionParams = @{
-                Uri = "https://westeurope.api.cognitive.microsoft.com/customvision/v3.0/Prediction/$ProjectId/classify/iterations/$ProjectName/url"
+                Uri = $Endpoint
                 Method = 'post'
                 ContentType = 'application/json'
                 Headers = @{
                     'Prediction-Key' = $Key
                 }
                 Body = @{
-                    url = $photo
+                    url = $rec.user.photos[0]
                 } | ConvertTo-Json
             }
         
-            Invoke-RestMethod @predictionParams
-        }
+            $prediction = Invoke-RestMethod @predictionParams
     }
 }
-Get-BlondeOrNot -PhoneNumber 4560878450
+Get-BlondeOrNot -PhoneNumber 4560878450 -Endpoint 'https://blondeornot.cognitiveservices.azure.com/customvision/v3.0/Prediction/44351a63-7587-4c0e-815f-8e3039cbe99f/classify/iterations/Iteration1/url' -Key 'e8fc31351f5541c98e5f7f66584fb329'
