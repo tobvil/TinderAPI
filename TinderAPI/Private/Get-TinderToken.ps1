@@ -16,7 +16,12 @@ function Get-TinderToken {
         } | ConvertTo-Json
     }
 
-    $null = Invoke-RestMethod @sendParams
+    $smsSend = Invoke-RestMethod @sendParams
+
+    #Checking if SMS was sent
+    if ($smsSend.data.sms_sent -eq $false) {
+        Write-Error "SMS wasn't sent"
+    }
 
     $smsCode = Read-Host "Enter SMS Code"
 
