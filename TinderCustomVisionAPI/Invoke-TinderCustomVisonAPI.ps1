@@ -1,12 +1,4 @@
-function Get-TinderToken
-{
-    Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/sms/send?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"phone_number`":`"$PhoneNumber`"}"
-    $SMSCode = Read-Host "Enter SMS Code"
-    $RequestValidate = Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/sms/validate?auth_type=sms&locale=en" -Method "POST" -ContentType "application/json" -Body "{`"otp_code`":`"$SMSCode`",`"phone_number`":`"$PhoneNumber`"}"
-    $RefreshToken = $requestvalidate.data.refresh_token
-    $RequestToken = Invoke-RestMethod -Uri "https://api.gotinder.com/v2/auth/login/sms?locale=en" -Method "POST" -ContentType "application/json" -Body "{`"refresh_token`":`"$RefreshToken`",`"phone_number`":`"$PhoneNumber`"}"
-    $Script:TinderToken = $requesttoken.data.api_token
-}
+
 function Get-HotOrNot
 {
     $Headers = @{"Prediction-Key" = "$PredictionKey"}

@@ -5,6 +5,7 @@ function Get-TinderToken {
         [string]
         $PhoneNumber
     )
+    $ErrorActionPreference = 'Stop'
 
     $sendParams = @{
         Uri         = 'https://api.gotinder.com/v2/auth/sms/send?auth_type=sms'

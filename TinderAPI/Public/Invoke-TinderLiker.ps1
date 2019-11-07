@@ -10,6 +10,7 @@ function Invoke-TinderLiker {
         $Count = 100
 
     )
+    $ErrorActionPreference = 'Stop'
 
     $tinderToken = Get-TinderToken -PhoneNumber $PhoneNumber 
 
@@ -24,6 +25,9 @@ function Invoke-TinderLiker {
     $i = 0
 
     while ($true) {
+        if ($i -eq $count) {
+            break
+        }
 
         $recs = Invoke-RestMethod @params -Uri "https://api.gotinder.com/v2/recs/core"
 
@@ -52,7 +56,7 @@ function Invoke-TinderLiker {
             }
 
             if ($i -eq $Count) {
-                exit
+                break
             }
         }
     } 
