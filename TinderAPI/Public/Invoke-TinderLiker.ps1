@@ -12,7 +12,9 @@ function Invoke-TinderLiker {
     )
     $ErrorActionPreference = 'Stop'
 
+    if (!($tinderToken)) {
     $tinderToken = Get-TinderToken -PhoneNumber $PhoneNumber 
+    }
 
     $params = @{
         Headers     = @{

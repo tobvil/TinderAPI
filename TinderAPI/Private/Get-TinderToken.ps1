@@ -49,5 +49,5 @@ function Get-TinderToken {
 
     $login = Invoke-RestMethod @loginParams
 
-    $login.data.api_token
+    $global:tinderToken = $login.data.api_token
 }
