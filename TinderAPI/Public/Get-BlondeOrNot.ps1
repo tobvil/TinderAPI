@@ -71,7 +71,7 @@ function Get-BlondeOrNot {
             [PSCustomObject]@{
                 Probability = $prediction.predictions[0].probability
                 Tag         = $prediction.predictions[0].tagName
-                Photo       = $rec.user.photos[0].url
+                Photo       = $rec.user.photos[0].url[0]
                 Count       = $i
             }
 
@@ -81,4 +81,3 @@ function Get-BlondeOrNot {
         }
     }
 }
-Get-BlondeOrNot -tinderToken '29dafdd9-64e2-4a91-a8fe-4762c85b210f' -Endpoint 'https://blondeornot.cognitiveservices.azure.com/customvision/v3.0/Prediction/44351a63-7587-4c0e-815f-8e3039cbe99f/classify/iterations/Iteration2/url' -Key 'e8fc31351f5541c98e5f7f66584fb329' -count 50

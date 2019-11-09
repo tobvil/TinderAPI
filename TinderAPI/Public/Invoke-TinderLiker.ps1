@@ -53,7 +53,7 @@ function Invoke-TinderLiker {
                 School   = $rec.user.schools[0].name
                 Distance = $rec.distance_mi
                 Birthday = $rec.user.birth_date
-                Photos   = $rec.user.photos.url
+                Photos   = $rec.user.photos.url[0]
                 Count    = $i
             }
 
