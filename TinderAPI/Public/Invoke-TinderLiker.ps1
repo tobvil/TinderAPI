@@ -1,65 +1,49 @@
 function Invoke-TinderLiker {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)]
-        [string]
-        $PhoneNumber,
 
-        [Parameter()]
-        [int]
-        $Count = 100
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $Id,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $Name,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $Photo
 
     )
-    $ErrorActionPreference = 'Stop'
 
-    if (!($tinderToken)) {
-    $tinderToken = Get-TinderToken -PhoneNumber $PhoneNumber 
+    Begin {
+
+        $params = @{
+            Headers     = @{
+                'X-Auth-Token' = $tinderToken
+            }
+            Method      = 'get'
+            ContentType = 'application/json'
+        }
+
     }
 
-    $params = @{
-        Headers     = @{
-            'X-Auth-Token' = $tinderToken
+    Process {
+
+        $likeRequest = Invoke-RestMethod @params -Uri "https://api.gotinder.com/like/$id"
+
+        if ($likeRequest.likes_remaining -eq 0) {
+            $date = [datetimeoffset]::FromUnixTimeMilliseconds($likeRequest.rate_limited_until)
+            Write-Error "You are ratelimited untill $($date.LocalDateTime)"
         }
-        Method      = 'get'
-        ContentType = 'application/json'
+
+        [PSCustomObject]@{
+            Name  = $Name
+            Photo = $Photo
+            Id    = $Id
+        }
+
     }
-
-    $i = 0
-
-    while ($true) {
-        if ($i -eq $count) {
-            break
-        }
-
-        $recs = Invoke-RestMethod @params -Uri "https://api.gotinder.com/v2/recs/core"
-
-        foreach ($rec in $recs.data.results) {
-
-            $id = $rec.user._id
-            $likeRequest = Invoke-RestMethod @params -Uri "https://api.gotinder.com/like/$id"
-
-            if ($likeRequest.likes_remaining -eq 0) {
-                $date = [datetimeoffset]::FromUnixTimeMilliseconds($likeRequest.rate_limited_until)
-                Write-Error "You are ratelimited untill $($date.LocalDateTime)"
-            }
-
-            $i++
-
-            [PSCustomObject]@{
-                Name     = $rec.user.name
-                Bio      = $rec.user.bio
-                City     = $rec.user.city.name
-                Job      = $rec.user.jobs[0].title.name
-                School   = $rec.user.schools[0].name
-                Distance = $rec.distance_mi
-                Birthday = $rec.user.birth_date
-                Photos   = $rec.user.photos.url[0]
-                Count    = $i
-            }
-
-            if ($i -eq $Count) {
-                break
-            }
-        }
-    } 
+    End {
+    }
 }
