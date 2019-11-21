@@ -10,13 +10,13 @@ function Invoke-BlondeOrNot {
         [string]
         $Endpoint,
 
-        [Parameter(ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipelineByPropertyName, Mandatory)]
         [string]
-        $Name,
+        $Photo,
 
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
-        $Photo,
+        $Name,
 
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]
