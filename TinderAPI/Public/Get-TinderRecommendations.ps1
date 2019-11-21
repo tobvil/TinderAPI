@@ -14,11 +14,6 @@ function Get-TinderRecommendations {
     $ErrorActionPreference = 'Stop'
 
     if (!($tinderToken)) {
-        if (!($PhoneNumber)) {
-            $PhoneNumber = Read-Host 'Enter phone number for authentication'
-            
-            Get-TinderToken -PhoneNumber $PhoneNumber 
-        }
         Get-TinderToken -PhoneNumber $PhoneNumber 
     }
 
