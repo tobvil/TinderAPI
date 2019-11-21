@@ -7,7 +7,7 @@ function Get-TinderRecommendations {
 
         [Parameter()]
         [int]
-        $Count = 10
+        $Count = 5
 
     )
 
@@ -36,8 +36,6 @@ function Get-TinderRecommendations {
 
         foreach ($rec in $recs.data.results) {
 
-            $id = $rec.user._id
-
             $i++
 
             [PSCustomObject]@{
@@ -49,7 +47,7 @@ function Get-TinderRecommendations {
                 Distance = $rec.distance_mi
                 Birthday = $rec.user.birth_date
                 Photo    = $rec.user.photos.url | Select-Object -First 1
-                Id       = $id
+                Id       = $rec.user._id
             }
 
             if ($i -eq $Count) {

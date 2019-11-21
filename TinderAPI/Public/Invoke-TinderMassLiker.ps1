@@ -35,8 +35,7 @@ function Invoke-TinderMassLiker {
 
         foreach ($rec in $recs.data.results) {
 
-            $id = $rec.user._id
-            $likeRequest = Invoke-RestMethod @params -Uri "https://api.gotinder.com/like/$id"
+            $likeRequest = Invoke-RestMethod @params -Uri "https://api.gotinder.com/like/$($rec.user._id)"
 
             if ($likeRequest.likes_remaining -eq 0) {
                 $date = [datetimeoffset]::FromUnixTimeMilliseconds($likeRequest.rate_limited_until)
