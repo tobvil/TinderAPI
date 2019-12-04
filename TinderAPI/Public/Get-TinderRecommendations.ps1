@@ -25,18 +25,16 @@ function Get-TinderRecommendations {
         ContentType = 'application/json'
     }
 
-    $i = 0
-
-    while ($true) {
-        if ($i -eq $count) {
-            break
-        }
-
+    while (!($i -eq $count)) {
+        
         $recs = Invoke-RestMethod @params -Uri 'https://api.gotinder.com/v2/recs/core'
 
         foreach ($rec in $recs.data.results) {
 
             $i++
+
+            $percentComplete = ($i / $count) * 100
+            Write-Progress -Activity "Fetching $($rec.user.name)" -Status "Fetched $i recommendations" -PercentComplete $percentComplete
 
             [PSCustomObject]@{
                 Name     = $rec.user.name
