@@ -26,10 +26,7 @@ function Invoke-TinderMassLiker {
 
     $i = 0
 
-    while ($true) {
-        if ($i -eq $count) {
-            break
-        }
+    while (!($i -eq $count)) {
 
         $recs = Invoke-RestMethod @params -Uri 'https://api.gotinder.com/v2/recs/core'
 
@@ -43,6 +40,9 @@ function Invoke-TinderMassLiker {
             }
 
             $i++
+
+            $percentComplete = ($i / $count) * 100
+            Write-Progress -Activity "Liking $($rec.user.name)" -Status "Total likes: $i" -PercentComplete $percentComplete
 
             [PSCustomObject]@{
                 Name     = $rec.user.name
