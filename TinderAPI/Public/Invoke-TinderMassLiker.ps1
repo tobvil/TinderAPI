@@ -13,7 +13,7 @@ function Invoke-TinderMassLiker {
     $ErrorActionPreference = 'Stop'
 
     if (!($tinderToken)) {
-        $tinderToken = Get-TinderToken -PhoneNumber $PhoneNumber 
+        $tinderToken = Get-TinderToken -PhoneNumber $PhoneNumber
     }
 
     $params = @{
@@ -42,7 +42,7 @@ function Invoke-TinderMassLiker {
             $i++
 
             $percentComplete = ($i / $count) * 100
-            Write-Progress -Activity "Liking $($rec.user.name)" -Status "Total likes: $i" -PercentComplete $percentComplete
+            Write-Progress -Activity "Liking $($rec.user.name)" -Status "Liked $i of $count : $percentComplete%" -PercentComplete $percentComplete
 
             [PSCustomObject]@{
                 Name     = $rec.user.name
@@ -60,5 +60,5 @@ function Invoke-TinderMassLiker {
                 break
             }
         }
-    } 
+    }
 }
